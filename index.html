@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REplay - Vinyl Clocks, Reborn</title>
+<meta name="description" content="REplay - Radnor Enterprise. Scratched vinyl records, transformed into clocks. A Young Enterprise company built by Year 10 students at Radnor House Sevenoaks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a1612;
+  --panel:#102019;
+  --panel2:#13261f;
+  --gold:#c9a84c;
+  --gold-bright:#e8c878;
+  --cream:#ece6d6;
+  --sage:#7a8c80;
+  --vinyl:#18181a;
+  --red-label:#8c2f2f;
+  --line: rgba(236,230,214,0.12);
+  --maxw: 1180px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--black);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  margin:0;
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+::selection{background:var(--gold);color:var(--black);}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+}
+
+/* texture grain overlay */
+.grain{
+  position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:0.035; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- NAV ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 28px;
+  background:linear-gradient(180deg, rgba(10,22,18,0.92), rgba(10,22,18,0));
+  backdrop-filter:blur(6px);
+  transition:padding 0.4s ease, background 0.4s ease;
+}
+header.scrolled{
+  background:rgba(10,22,18,0.88);
+  padding:10px 28px;
+  border-bottom:1px solid var(--line);
+}
+.scroll-path-indicator{
+  position:fixed;
+  top:0;
+  left:-14px;
+  width:42px;
+  height:100vh;
+  pointer-events:none;
+  z-index:999;
+}
+.scroll-path-indicator svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+#scrollPath{
+  stroke:rgba(233,207,120,0.28);
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 18px rgba(233,207,120,0.16));
+  stroke-dasharray:2 6;
+  opacity:0.7;
+}
+.scroll-dot{
+  position:absolute;
+  top:0;
+  left:50%;
+  width:8px;
+  height:8px;
+  transform:translate(-50%, -50%);
+  border-radius:50%;
+  background:var(--gold-bright);
+  filter:drop-shadow(0 0 20px rgba(233,207,120,0.35));
+  opacity:0;
+  transition:opacity 0.15s ease, top 0.15s ease;
+}
+.page-shell{
+  position:relative;
+  z-index:1;
+}
+.logo{
+  display:flex; align-items:center; gap:10px;
+  cursor:pointer; user-select:none;
+}
+.logo-disc{
+  width:34px; height:34px; border-radius:50%;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.14), transparent 34%),
+    radial-gradient(circle at center, #2a2f24 0 22%, #12160f 26% 58%, #060804 78% 100%);
+  position:relative;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 1px rgba(201,168,76,0.28);
+}
+.logo-disc::before{
+  content:'';
+  position:absolute;
+  bottom:50%; left:50%;
+  width:2px; height:8px;
+  background:linear-gradient(to top, #e8c878, #d4b860);
+  transform:translateX(-50%) rotate(0deg);
+  transform-origin:0 8px;
+  border-radius:1px;
+  animation:hourHand 720s linear infinite;
+}
+.logo-disc::after{
+  content:'';
+  position:absolute;
+  bottom:50%; left:50%;
+  width:1px; height:11px;
+  background:linear-gradient(to top, #c9a84c, #b89840);
+  transform:translateX(-50%) rotate(0deg);
+  transform-origin:0 11px;
+  border-radius:0.5px;
+  animation:minuteHand 60s linear infinite;
+}
+@keyframes hourHand{to{transform:translateX(-50%) rotate(360deg);}}
+@keyframes minuteHand{to{transform:translateX(-50%) rotate(360deg);}}
+.logo-text{font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; letter-spacing:0.01em;}
+.logo-text .re{color:var(--gold-bright);}
+nav{display:flex;gap:6px;align-items:center;}
+nav button.navlink{
+  font-family:'Inter',sans-serif; font-weight:600; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;
+  background:none;border:none;color:var(--cream); cursor:pointer; padding:10px 16px; border-radius:30px;
+  position:relative; transition:color 0.3s, background 0.3s;
+}
+nav button.navlink:hover{background:rgba(201,168,76,0.12); color:var(--gold-bright);}
+.nav-shop{
+  border:1px solid var(--gold) !important; padding:9px 20px !important;
+}
+.burger{display:none;}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh; position:relative; display:flex; align-items:center;
+  padding-top:90px;
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 10%, rgba(201,168,76,0.10), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 10% 90%, rgba(122,140,128,0.10), transparent 60%),
+    var(--black);
+  overflow:hidden;
+}
+.hero-grid{
+  display:grid; grid-template-columns: 1.1fr 1fr; gap:40px; align-items:center;
+  width:100%;
+}
+.eyebrow{
+  font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold);
+  display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  opacity:0; animation:riseIn 0.8s 0.1s forwards cubic-bezier(.16,1,.3,1);
+}
+.eyebrow::before{content:'';width:26px;height:1px;background:var(--gold);}
+.hero h1{
+  font-size:clamp(2.6rem, 6vw, 4.6rem); line-height:1.02; color:var(--cream);
+  opacity:0; animation:riseIn 0.9s 0.25s forwards cubic-bezier(.16,1,.3,1);
+}
+.hero h1 em{font-style:italic; color:var(--gold-bright); font-weight:500;}
+.hero p.lede{
+  margin-top:24px; max-width:480px; font-size:1.08rem; line-height:1.6; color:var(--sage);
+  opacity:0; animation:riseIn 0.9s 0.4s forwards cubic-bezier(.16,1,.3,1);
+}
+.hero-ctas{
+  margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;
+  opacity:0; animation:riseIn 0.9s 0.55s forwards cubic-bezier(.16,1,.3,1);
+}
+@keyframes riseIn{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
+
+.btn{
+  display:inline-flex; align-items:center; gap:10px; padding:15px 28px; border-radius:40px;
+  font-weight:700; font-size:0.92rem; letter-spacing:0.02em; cursor:pointer; border:none;
+  transition:transform 0.35s cubic-bezier(.16,1,.3,1), box-shadow 0.35s;
+}
+.btn-gold{background:linear-gradient(135deg,#e8c878,#c9a84c); color:#1a1306;}
+.btn-gold:hover{transform:translateY(-3px); box-shadow:0 14px 30px -8px rgba(201,168,76,0.5);}
+.btn-outline{background:transparent; border:1px solid var(--line); color:var(--cream);}
+.btn-outline:hover{border-color:var(--gold); transform:translateY(-3px);}
+
+/* hero vinyl clock - the signature piece */
+.hero-disc-wrap{
+  position:relative; display:flex; justify-content:center; align-items:center;
+  perspective:1200px;
+}
+.hero-image{
+  width:min(420px, 80vw); height:min(420px, 80vw); position:relative;
+  border-radius:26px;
+  overflow:hidden;
+  box-shadow:0 30px 100px -30px rgba(0,0,0,0.65);
+  background:url("images/1166bde0-3987-4431-83f0-8d356d8e5647.JPG") center/cover no-repeat;
+  opacity:0; animation:discIn 1.1s 0.3s forwards cubic-bezier(.16,1,.3,1);
+}
+@keyframes discIn{from{opacity:0; transform:scale(0.78) rotate(-8deg);} to{opacity:1; transform:scale(1) rotate(0deg);}}
+
+.crate-shadow-floor{
+  position:absolute; bottom:-30px; left:50%; width:70%; height:30px; transform:translateX(-50%);
+  background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%); filter:blur(4px);
+}
+
+.scroll-cue{
+  position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--sage); font-size:0.7rem;
+  letter-spacing:0.15em; text-transform:uppercase; opacity:0.7;
+}
+.scroll-cue .line{width:1px; height:32px; background:linear-gradient(var(--gold), transparent); animation:scrollPulse 2s ease-in-out infinite;}
+@keyframes scrollPulse{0%,100%{opacity:0.3;} 50%{opacity:1;}}
+
+/* ---------- SECTION GENERIC ---------- */
+section{position:relative; padding:120px 0;}
+.section-head{max-width:640px; margin-bottom:64px;}
+.section-head .eyebrow{margin-bottom:16px;}
+.section-head h2{font-size:clamp(2rem,4vw,3rem); color:var(--cream);}
+.section-head p{color:var(--sage); margin-top:18px; font-size:1.05rem; line-height:1.6;}
+.reveal{opacity:0; transform:translateY(40px); transition:opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1; transform:translateY(0);}
+.divider{height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent);}
+
+/* ---------- ABOUT ---------- */
+#about{background:linear-gradient(180deg, var(--black), var(--panel));}
+.about-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+.about-copy p{font-size:1.05rem; line-height:1.75; color:var(--cream); margin-bottom:18px;}
+.about-copy strong{color:var(--gold-bright);}
+.about-photo{
+  width:100%; min-height:420px; border-radius:24px; background:url("images/a0b096ab-2870-4d5b-b797-d70b42289c20.JPG") center/cover no-repeat; background-size:cover; box-shadow:0 40px 80px -40px rgba(0,0,0,0.7); margin-bottom:14px;
+}
+.team-grid{display:grid; grid-template-columns:repeat(6, 1fr); gap:8px; margin-top:32px;}
+.team-card{
+  background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:14px 8px; text-align:center;
+  transition:transform 0.4s cubic-bezier(.16,1,.3,1), border-color 0.4s;
+}
+.team-card:hover{transform:translateY(-6px) rotate(-1deg); border-color:var(--gold);}
+.team-card .role-icon{
+  width:34px;height:34px;margin:0 auto 10px; border-radius:50%; background:rgba(201,168,76,0.12);
+  display:flex; align-items:center; justify-content:center; color:var(--gold-bright);
+}
+.team-card .role-icon svg{width:16px;height:16px;}
+.team-card h4{font-family:'Inter'; font-size:0.72rem; font-weight:700; color:var(--cream); margin-bottom:4px; line-height:1.25;}
+.team-card p{font-size:0.66rem; color:var(--sage); margin:0; line-height:1.3;}
+
+/* ---------- POLICY / IMPACT ---------- */
+#policy{background:url("images/db164f05-a717-4640-9876-fd40d9d9cc75.JPG") center center/80% auto no-repeat; background-attachment:fixed;}
+#policy::before{
+  content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,22,18,0.82), rgba(10,22,18,0.92)); pointer-events:none;
+}
+.impact-counter-block{
+  display:grid; grid-template-columns: 0.9fr 1.1fr; gap:60px; align-items:center;
+  background:rgba(10,22,18,0.82); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:56px; margin-bottom:60px;
+  position:relative; overflow:hidden;
+}
+.impact-counter-block::before{
+  content:''; position:absolute; width:300px; height:300px; border-radius:50%;
+  background:repeating-radial-gradient(circle, transparent 0 6px, rgba(201,168,76,0.05) 7px 8px);
+  top:-100px; right:-100px;
+}
+.counter-label{font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--sage); margin-bottom:10px;}
+.counter-number{
+  font-family:'Fraunces',serif; font-weight:700; font-size:clamp(4.5rem,11vw,8rem); color:var(--gold-bright); line-height:0.9;
+  display:flex; align-items:flex-start;
+}
+.counter-number .plus{font-size:0.4em; margin-left:6px; margin-top:14px;}
+.counter-sub{color:var(--cream); font-size:1.02rem; line-height:1.6; margin-top:14px; max-width:380px;}
+.spin-strip{
+  position:relative; height:220px; border-radius:16px; overflow:hidden;
+  background:#08120d; border:1px solid var(--line);
+}
+.spin-strip .impact-photo{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 37%; display:block;
+}
+.spin-strip .reel{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+  pointer-events:none;
+}
+.spin-strip .mini-disc{
+  display:none;
+}
+
+.stats-row{display:grid; grid-template-columns:repeat(2,1fr); gap:24px;}
+.stat-card{
+  background:var(--panel2); border:1px solid var(--line); border-radius:16px; padding:30px 26px;
+  transition:transform 0.4s cubic-bezier(.16,1,.3,1), border-color 0.4s;
+}
+.stat-card:hover{transform:translateY(-6px); border-color:var(--gold);}
+.stat-card .num{font-family:'Fraunces',serif; font-size:2.4rem; color:var(--gold-bright); font-weight:700;}
+.stat-card .lab{font-size:0.85rem; color:var(--sage); margin-top:8px; line-height:1.5;}
+
+/* ---------- SHOP ---------- */
+#shop{background:linear-gradient(180deg, var(--panel), var(--black));}
+.shop-grid{display:grid; grid-template-columns:repeat(3, minmax(200px, 1fr)); gap:20px; margin-bottom:60px;}
+.product-card{
+  background:var(--panel2); border:1px solid var(--line); border-radius:16px; overflow:hidden; cursor:pointer;
+  transition:transform 0.35s cubic-bezier(.16,1,.3,1), box-shadow 0.35s, border-color 0.3s;
+  position:relative;
+}
+.product-card:hover{transform:translateY(-8px) scale(1.01); box-shadow:0 24px 40px -18px rgba(0,0,0,0.55); border-color:var(--gold);}
+.product-img{
+  aspect-ratio:1/1;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  background:radial-gradient(circle at 50% 35%, rgba(236,230,214,0.05), #0c0c0d 35%, #090b0d 100%);
+}
+.product-img img.product-cover{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.product-img::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 32%, rgba(255,255,255,0.05), transparent 22%);
+  pointer-events:none;
+}
+.product-plate{
+  width:58%; height:58%; border-radius:50%; background:radial-gradient(circle at 40% 38%, #372222 0 15%, #170d0f 20% 40%, #0a0a0c 45% 100%);
+  position:absolute; z-index:1;
+}
+.product-card:hover .product-img{transform:scale(1.015);}
+.product-img .ph-hands{position:absolute; width:72%; height:72%; top:14%; left:14%; z-index:2;}
+.product-img .ph-hands .hand{background:var(--cream); opacity:0.85;}
+.placeholder-text{
+  color:var(--sage); font-family:'Inter'; font-size:0.85rem; letter-spacing:0.04em; text-transform:uppercase;
+  text-align:center; padding:0 20px;
+}
+.product-info{padding:14px 16px 18px;}
+.product-info h4{font-family:'Fraunces',serif; font-size:1rem; color:var(--cream); margin-bottom:4px;}
+.product-info .price{color:var(--gold-bright); font-weight:700; font-size:0.95rem;}
+.product-info .desc{font-size:0.78rem; color:var(--sage); margin-top:6px; line-height:1.45;}
+.add-btn{
+  margin-top:12px; width:100%; padding:9px; border-radius:28px; background:rgba(201,168,76,0.1);
+  border:1px solid var(--gold); color:var(--gold-bright); font-weight:700; font-size:0.76rem; letter-spacing:0.04em;
+  cursor:pointer; transition:background 0.3s, color 0.3s;
+}
+.add-btn:hover{background:var(--gold); color:#1a1306;}
+.add-btn.added{background:var(--gold); color:#1a1306;}
+
+/* basket bar */
+.basket-bar{
+  position:fixed; bottom:0; left:0; right:0; z-index:900;
+  background:rgba(13,26,20,0.97); backdrop-filter:blur(10px); border-top:1px solid var(--gold);
+  padding:16px 28px; display:flex; align-items:center; justify-content:space-between;
+  transform:translateY(110%); transition:transform 0.5s cubic-bezier(.16,1,.3,1);
+}
+.basket-bar.show{transform:translateY(0);}
+.basket-bar .info{display:flex; align-items:center; gap:14px; font-size:0.92rem;}
+.basket-bar .count-pill{
+  background:var(--gold); color:#1a1306; font-weight:800; font-size:0.78rem; padding:4px 10px; border-radius:20px;
+}
+
+/* order form */
+.order-panel{
+  display:grid; grid-template-columns:1fr 1fr; gap:50px;
+  background:var(--panel2); border:1px solid var(--line); border-radius:24px; padding:50px;
+}
+.basket-list{min-height:60px;}
+.basket-item{
+  display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); font-size:0.92rem;
+}
+.basket-item button{background:none;border:none;color:var(--sage); cursor:pointer; font-size:0.78rem;}
+.basket-item button:hover{color:#d96b6b;}
+.basket-empty{color:var(--sage); font-size:0.9rem; padding:20px 0;}
+
+.form-group{margin-bottom:18px;}
+.form-group label{display:block; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--sage); margin-bottom:8px;}
+.form-group input, .form-group select, .form-group textarea{
+  width:100%; padding:13px 16px; border-radius:10px; border:1px solid var(--line); background:#0c1a14; color:var(--cream);
+  font-family:'Inter'; font-size:0.95rem; transition:border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+  outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,168,76,0.15);
+}
+.collection-note{
+  display:flex; gap:14px; align-items:flex-start; background:rgba(201,168,76,0.08); border:1px solid var(--gold);
+  border-radius:12px; padding:16px 18px; margin-bottom:24px; font-size:0.88rem; line-height:1.55;
+}
+.collection-note svg{flex-shrink:0; width:20px;height:20px; color:var(--gold-bright); margin-top:2px;}
+.pay-options{display:flex; gap:12px; margin-top:6px;}
+.pay-option{
+  flex:1; padding:14px; border:1px solid var(--line); border-radius:10px; text-align:center; cursor:pointer;
+  font-size:0.82rem; font-weight:600; transition:border-color 0.3s, background 0.3s;
+}
+.pay-option.active{border-color:var(--gold); background:rgba(201,168,76,0.1); color:var(--gold-bright);}
+.submit-btn{
+  width:100%; margin-top:10px; padding:16px; border-radius:40px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,#e8c878,#c9a84c); color:#1a1306; font-weight:800; font-size:0.95rem;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.submit-btn:hover{transform:translateY(-2px); box-shadow:0 14px 30px -8px rgba(201,168,76,0.5);}
+.form-success{
+  display:none; text-align:center; padding:40px 20px;
+}
+.form-success.show{display:block;}
+.form-success .tick{
+  width:60px;height:60px;border-radius:50%; background:var(--gold); margin:0 auto 18px; display:flex; align-items:center; justify-content:center;
+  animation:popIn 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{transform:scale(0);} to{transform:scale(1);}}
+
+/* footer */
+footer{background:var(--black); border-top:1px solid var(--line); padding:60px 0 100px;}
+.footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; align-items:center;}
+.footer-brand{display:flex; align-items:center; gap:10px;}
+.footer-note{color:var(--sage); font-size:0.85rem; max-width:420px; line-height:1.6;}
+.footer-meta{color:var(--sage); font-size:0.78rem; margin-top:30px; text-align:center;}
+
+/* responsive */
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr; text-align:center;}
+  .hero p.lede{margin-left:auto; margin-right:auto;}
+  .eyebrow{justify-content:center;}
+  .hero-ctas{justify-content:center;}
+  .about-grid{grid-template-columns:1fr;}
+  .team-grid{grid-template-columns:repeat(2,1fr);}
+  .impact-counter-block{grid-template-columns:1fr; padding:36px;}
+  .stats-row{grid-template-columns:1fr;}
+  .order-panel{grid-template-columns:1fr; padding:32px;}
+  nav{display:none;}
+  nav.open{
+    display:flex; position:fixed; top:64px; left:0; right:0; flex-direction:column; background:rgba(10,22,18,0.98);
+    padding:20px; border-bottom:1px solid var(--line); gap:4px;
+  }
+  .burger{display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;}
+  .burger span{width:24px; height:2px; background:var(--cream); border-radius:2px;}
+}
+@media (max-width:600px){
+  .shop-grid{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .product-info{
+    padding: 12px 10px 14px;
+  }
+  .placeholder-text{
+    font-size: 0.75rem;
+    padding: 0 10px;
+  }
+  .product-info h4{
+    font-size: 0.9rem;
+  }
+  .product-info .desc{
+    font-size: 0.72rem;
+  }
+}
+@media (max-width:560px){
+  .team-grid{grid-template-columns:1fr 1fr;}
+  section{padding:80px 0;}
+  .wrap{padding:0 20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scroll-path-indicator" aria-hidden="true">
+  <svg viewBox="0 0 100 1200" preserveAspectRatio="none">
+    <path id="scrollPath" d="M50,0 L50,1200" fill="none"/>
+  </svg>
+  <div class="scroll-dot"></div>
+</div>
+<div class="page-shell">
+
+<header id="siteHeader">
+  <div class="logo" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'})">
+    <div class="logo-disc"></div>
+    <div class="logo-text"><span class="re">RE</span>play</div>
+  </div>
+  <nav id="mainNav">
+    <button class="navlink" onclick="jump('about')">About Us</button>
+    <button class="navlink" onclick="jump('policy')">Policy</button>
+    <button class="navlink nav-shop" onclick="jump('shop')">Shop</button>
+  </nav>
+  <button class="burger" id="burgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<div id="top"></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Radnor Enterprise &middot; Young Enterprise UK — 2026</div>
+      <h1>Records that<br>stopped spinning.<br><em>Now they keep time.</em></h1>
+      <p class="lede">Each REplay clock is hand-built from a real vinyl record - scratched, charity shop, or simply forgotten - rescued from landfill and given a second life on your wall.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-gold" onclick="jump('shop')">Shop the collection</button>
+        <button class="btn btn-outline" onclick="jump('policy')">See our impact</button>
+      </div>
+    </div>
+    <div class="hero-disc-wrap">
+      <div class="hero-image"></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>SCROLL</div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Who we are</div>
+      <h2>Eight students. One school.<br>A crate full of old records.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>We're a team of just under ten <strong>Year 10 students</strong> at Radnor House Sevenoaks, running REplay as our company for the <strong>Young Enterprise</strong> programme. Our name starts with <strong>RE</strong> to mark Radnor Enterprise, and it also emphasizes recycling and replaying old records to keep them out of landfill.</p>
+        <p>We split ourselves across three departments - <strong>Finance</strong>, <strong>Production</strong> and <strong>Marketing</strong> - and run REplay the way a real small business has to: tight budgets, real suppliers, real customers.</p>
+        <p>We took our first batch of clocks to <strong>Spitalfields Market in London</strong>, set up a stall among working market traders, and sold directly to the public. It's where we learned what people actually want to hang on their wall.</p>
+      </div>
+      <div>
+        <div class="about-photo"></div>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h4>Finance</h4><p>Budgets, pricing & costings</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.2 4.2l4.2 4.2M15.6 15.6l4.2 4.2M1 12h6M17 12h6M4.2 19.8l4.2-4.2M15.6 8.4l4.2-4.2"/></svg></div>
+        <h4>Production</h4><p>Sourcing, cutting & building</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg></div>
+        <h4>Marketing</h4><p>Branding, social & market stalls</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h4>Quality Check</h4><p>Every hand tested before sale</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h4>Sourcing</h4><p>Charity shops & donations</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></div>
+        <h4>Operations</h4><p>Orders, packing & collection</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= POLICY ================= -->
+<section id="policy">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our impact</div>
+      <h2>Every clock is one less record in landfill.</h2>
+      <p>Vinyl is PVC - it doesn't biodegrade, and most warped or scratched records end up thrown away rather than played. We intercept them before that happens, and turn something unplayable into something useful for decades.</p>
+    </div>
+
+    <div class="impact-counter-block reveal">
+      <div>
+        <div class="counter-label">Records rescued so far</div>
+        <div class="counter-number"><span id="counterNum">0</span><span class="plus">+</span></div>
+        <div class="counter-sub">Every record we use was scratched, warped, or unwanted - destined for a bin rather than a turntable. We give each one a working life again.</div>
+      </div>
+      <div class="spin-strip">
+        <img class="impact-photo" src="images/2eecc38c-0222-47c2-806e-8b334fd47eec.JPG" alt="Rescued record" />
+        <div class="reel" id="reelStrip"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card reveal">
+        <div class="num">0g</div>
+        <div class="lab">new plastic used - every disc is 100% reclaimed vinyl.</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="num">~135g</div>
+        <div class="lab">average PVC weight diverted from landfill per clock we sell.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SHOP ================= -->
+<section id="shop">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The collection</div>
+      <h2>Five records. Five clocks.<br>All one of a kind.</h2>
+      <p>Every sleeve is different, every clock is unique - once it's gone, that exact record won't come back round. Click a clock to add it, then check out below.</p>
+    </div>
+
+    <div class="shop-grid" id="shopGrid"></div>
+
+    <div class="order-panel reveal" id="orderPanel">
+      <div>
+        <h3 style="margin-bottom:20px;">Your basket</h3>
+        <div class="basket-list" id="basketList"><div class="basket-empty">Your basket is empty - pick a clock above.</div></div>
+        <div class="divider" style="margin:20px 0;"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem;">
+          <span>Total</span><span id="basketTotal">£0</span>
+        </div>
+      </div>
+
+      <div>
+        <div data-fs-success style="display:none;">
+          <div class="form-success">
+            <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1306" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <h3>Order received - thank you!</h3>
+            <p style="color:var(--sage); margin-top:10px;">We'll email you shortly to confirm and arrange collection from Radnor House Sevenoaks.</p>
+          </div>
+        </div>
+        <div data-fs-error style="display:none; color:#d96b6b; margin-bottom:20px;"></div>
+
+        <form id="orderForm">
+          <h3 style="margin-bottom:20px;">Place your order</h3>
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" name="name" required placeholder="e.g. Alex Whitfield" data-fs-field />
+            <span data-fs-error="name" style="color:#d96b6b; font-size:0.75rem; display:block; margin-top:4px;"></span>
+          </div>
+          <div class="form-group">
+            <label>Email address</label>
+            <input type="email" name="email" required placeholder="you@example.com" data-fs-field />
+            <span data-fs-error="email" style="color:#d96b6b; font-size:0.75rem; display:block; margin-top:4px;"></span>
+          </div>
+          <div class="form-group">
+            <label>Anything else? (colour preference, message, questions)</label>
+            <textarea name="message" rows="3" placeholder="Optional" data-fs-field></textarea>
+            <span data-fs-error="message" style="color:#d96b6b; font-size:0.75rem; display:block; margin-top:4px;"></span>
+          </div>
+
+          <div class="collection-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
+            <div><strong>Collection only.</strong> All orders are collected from Radnor House Sevenoaks (near Sundridge) - we'll email you to arrange a time. We aren't able to post or deliver.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Payment method</label>
+            <div class="pay-options">
+              <div class="pay-option active" data-pay="cash" onclick="selectPay(this)">Cash on collection</div>
+              <div class="pay-option" data-pay="card" onclick="selectPay(this)">Pay online (card)</div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" data-fs-submit-btn>Submit order</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- basket bar -->
+<div class="basket-bar" id="basketBar">
+  <div class="info">🛒 <span class="count-pill" id="barCount">0</span> <span id="barText">items in basket</span></div>
+  <button class="btn btn-gold" style="padding:10px 22px;" onclick="jump('shop'); document.getElementById('orderPanel').scrollIntoView({behavior:'smooth', block:'center'})">Checkout →</button>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-disc" style="animation-play-state:paused;"></div>
+        <div class="logo-text"><span class="re">RE</span>play</div>
+      </div>
+      <div class="footer-note">REplay (Radnor Enterprise) is a Young Enterprise student company run by Year 10 students at Radnor House Sevenoaks, Sundridge, Kent. All clocks are handmade from reclaimed vinyl.</div>
+    </div>
+    <div class="footer-meta">© 2026 REplay · Radnor Enterprise · A Young Enterprise UK — 2026</div>
+  </div>
+</footer>
+
+<script>
+/* ---------- NAV ---------- */
+function jump(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.getElementById('mainNav').classList.remove('open');
+}
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', ()=>{
+  header.classList.toggle('scrolled', window.scrollY > 40);
+});
+document.getElementById('burgerBtn').addEventListener('click', ()=>{
+  document.getElementById('mainNav').classList.toggle('open');
+});
+/* ---------- SCROLL DOT PATH ---------- */
+const scrollPath = document.getElementById('scrollPath');
+const scrollDot = document.querySelector('.scroll-dot');
+const pathLength = scrollPath.getTotalLength();
+
+function updateScrollDot(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+  const pathPoint = scrollPath.getPointAtLength(pathLength * progress);
+  scrollDot.style.top = `${pathPoint.y}px`;
+  scrollDot.style.opacity = progress > 0.01 ? 1 : 0;
+}
+
+window.addEventListener('scroll', updateScrollDot);
+window.addEventListener('resize', updateScrollDot);
+updateScrollDot();
+/* ---------- SCROLL REVEAL ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, {threshold:0.15});
+revealEls.forEach(el=>io.observe(el));
+
+/* ---------- IMPACT COUNTER (roll-up) ---------- */
+const counterEl = document.getElementById('counterNum');
+const reelStrip = document.getElementById('reelStrip');
+const TARGET = 25;
+for(let i=0;i<6;i++){
+  const d = document.createElement('div');
+  d.className = 'mini-disc';
+  reelStrip.appendChild(d);
+}
+let counterStarted = false;
+const counterBlock = document.querySelector('.impact-counter-block');
+const counterIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !counterStarted){
+      counterStarted = true;
+      runCounter();
+    }
+  });
+}, {threshold:0.4});
+counterIO.observe(counterBlock);
+
+function runCounter(){
+  let n = 0;
+  const discs = reelStrip.querySelectorAll('.mini-disc');
+  const interval = setInterval(()=>{
+    n++;
+    counterEl.textContent = n;
+    const activeIdx = n % discs.length;
+    discs.forEach((d,i)=> d.classList.toggle('active', i===activeIdx));
+    if(n >= TARGET){
+      clearInterval(interval);
+      discs.forEach(d=>d.classList.remove('active'));
+      discs[0].classList.add('active');
+    }
+  }, 55);
+}
+
+/* ---------- PRODUCTS / SHOP ---------- */
+const shopGrid = document.getElementById('shopGrid');
+const basket = [];
+let products = [
+  {
+    id: 1,
+    name: "insert title",
+    price: 15,
+    desc: "insert description",
+    stock: 1
+  },
+  {
+    id: 2,
+    name: "insert title",
+    price: 15,
+    desc: "insert description",
+    stock: 1
+  },
+  {
+    id: 3,
+    name: "insert title",
+    price: 15,
+    desc: "insert description",
+    stock: 1
+  },
+  {
+    id: 4,
+    name: "insert title",
+    price: 15,
+    desc: "insert description",
+    stock: 1
+  },
+  {
+    id: 5,
+    name: "insert title",
+    price: 15,
+    desc: "insert description",
+    stock: 1
+  },
+  {
+    id: 6,
+    name: "Custom Clock",
+    price: 15,
+    desc: "Bring your own record and we'll transform it into a clock",
+    stock: 1
+  }
+];
+
+// Load products - checks live stock from the server before showing the shop,
+// so an item bought by anyone disappears for everyone.
+async function loadProducts(){
+  try {
+    const res = await fetch('/api/stock');
+    const data = await res.json();
+    const soldIds = data.soldIds || [];
+    products.forEach(p => {
+      if(soldIds.includes(p.id)) p.stock = 0;
+    });
+  } catch (err) {
+    console.error('Could not check live stock, showing all items:', err);
+  }
+  renderProducts();
+}
+
+function renderProducts(){
+  shopGrid.innerHTML = '';
+  products.forEach(p=>{
+    if(p.stock <= 0) return; // Skip out-of-stock items
+    
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    const imageBlock = p.id === 6 ?
+      `<img class="product-cover" src="images/custom-clock.svg" alt="${p.name}" />` :
+      `<div class="placeholder-text">Placeholder image</div>`;
+    card.innerHTML = `
+      <div class="product-img">
+        ${imageBlock}
+      </div>
+      <div class="product-info">
+        <h4>${p.name}</h4>
+        <div class="price">£${p.price}</div>
+        <div class="desc">${p.desc}</div>
+        <button class="add-btn" data-id="${p.id}">Add to basket</button>
+      </div>
+    `;
+    shopGrid.appendChild(card);
+  });
+}
+
+loadProducts();
+
+shopGrid.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('add-btn')){
+    const id = parseInt(e.target.dataset.id);
+    const product = products.find(p=>p.id===id);
+    basket.push(product);
+    e.target.textContent = "Added ✓";
+    e.target.classList.add('added');
+    setTimeout(()=>{ e.target.textContent = "Add to basket"; e.target.classList.remove('added'); }, 1200);
+    renderBasket();
+  }
+});
+
+function renderBasket(){
+  const list = document.getElementById('basketList');
+  const totalEl = document.getElementById('basketTotal');
+  const bar = document.getElementById('basketBar');
+  const barCount = document.getElementById('barCount');
+  const barText = document.getElementById('barText');
+
+  if(basket.length === 0){
+    list.innerHTML = '<div class="basket-empty">Your basket is empty - pick a clock above.</div>';
+    totalEl.textContent = '£0';
+    bar.classList.remove('show');
+    return;
+  }
+  list.innerHTML = basket.map((item, idx)=>`
+    <div class="basket-item">
+      <span>${item.name}</span>
+      <span style="display:flex; align-items:center; gap:14px;">£${item.price} <button onclick="removeItem(${idx})">remove</button></span>
+    </div>
+  `).join('');
+  const total = basket.reduce((s,i)=>s+i.price, 0);
+  totalEl.textContent = `£${total}`;
+  bar.classList.add('show');
+  barCount.textContent = basket.length;
+  barText.textContent = basket.length === 1 ? 'item in basket' : 'items in basket';
+}
+function removeItem(idx){
+  basket.splice(idx,1);
+  renderBasket();
+}
+
+/* ---------- PAYMENT TOGGLE ---------- */
+function selectPay(el){
+  document.querySelectorAll('.pay-option').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ---------- ORDER FORM SUBMISSION ---------- */
+document.getElementById('orderForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  
+  if(basket.length === 0){
+    alert('Your basket is empty!');
+    return;
+  }
+
+  const submitBtn = this.querySelector('.submit-btn');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  try {
+    const formData = new FormData(this);
+    const paymentMethod = document.querySelector('.pay-option.active').dataset.pay;
+    
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message'),
+        paymentMethod,
+        basket,
+      }),
+    });
+
+    if(!response.ok) throw new Error('Order submission failed');
+    
+    const result = await response.json();
+
+    // If paying by card, redirect to Stripe's secure checkout page
+    if(result.checkoutUrl){
+      window.location.href = result.checkoutUrl;
+      return;
+    }
+    
+    // Cash on collection - show success message right away
+    document.querySelector('[data-fs-success]').style.display = 'block';
+    this.style.display = 'none';
+    
+    // Clear basket
+    basket.length = 0;
+    renderBasket();
+    
+    // Reload products to reflect sold-out items
+    loadProducts();
+  } catch(error){
+    console.error('Error:', error);
+    document.querySelector('[data-fs-error]').textContent = 'Order submission failed. Please try again.';
+    document.querySelector('[data-fs-error]').style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  }
+});
+</script>
+</div>
+
+</body>
+</html>

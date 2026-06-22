@@ -1,0 +1,8 @@
+{
+  "name": "replay-site",
+  "version": "1.0.0",
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@upstash/redis": "^1.31.0"
+  }
+}

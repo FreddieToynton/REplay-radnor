@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f271d"/>
+      <stop offset="100%" stop-color="#12170f"/>
+    </linearGradient>
+    <radialGradient id="highlight" cx="50%" cy="20%" r="45%">
+      <stop offset="0%" stop-color="#bed6a3" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#0c110a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vinyl" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#263324"/>
+      <stop offset="55%" stop-color="#13190f"/>
+      <stop offset="100%" stop-color="#050604"/>
+    </radialGradient>
+    <radialGradient id="label" cx="50%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#ffe69b"/>
+      <stop offset="100%" stop-color="#b1914f"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="900" height="900" fill="url(#bg)"/>
+  <rect width="900" height="900" fill="url(#highlight)"/>
+
+  <g opacity="0.28" fill="none" stroke="#5c7258" stroke-width="2">
+    <circle cx="450" cy="450" r="320"/>
+    <circle cx="450" cy="450" r="240"/>
+  </g>
+
+  <g transform="translate(210,210)">
+    <circle cx="0" cy="0" r="190" fill="url(#vinyl)"/>
+    <circle cx="0" cy="0" r="154" fill="none" stroke="#202820" stroke-width="6"/>
+    <circle cx="0" cy="0" r="30" fill="url(#label)"/>
+    <circle cx="0" cy="0" r="10" fill="#12160f"/>
+    <g stroke="#869973" stroke-width="1" opacity="0.45">
+      <circle cx="0" cy="0" r="180"/>
+      <circle cx="0" cy="0" r="174"/>
+      <circle cx="0" cy="0" r="168"/>
+      <circle cx="0" cy="0" r="162"/>
+      <circle cx="0" cy="0" r="156"/>
+      <circle cx="0" cy="0" r="150"/>
+      <circle cx="0" cy="0" r="144"/>
+      <circle cx="0" cy="0" r="138"/>
+      <circle cx="0" cy="0" r="132"/>
+      <circle cx="0" cy="0" r="126"/>
+      <circle cx="0" cy="0" r="120"/>
+      <circle cx="0" cy="0" r="114"/>
+      <circle cx="0" cy="0" r="108"/>
+      <circle cx="0" cy="0" r="102"/>
+      <circle cx="0" cy="0" r="96"/>
+      <circle cx="0" cy="0" r="90"/>
+      <circle cx="0" cy="0" r="84"/>
+      <circle cx="0" cy="0" r="78"/>
+      <circle cx="0" cy="0" r="72"/>
+      <circle cx="0" cy="0" r="66"/>
+      <circle cx="0" cy="0" r="60"/>
+      <circle cx="0" cy="0" r="54"/>
+      <circle cx="0" cy="0" r="48"/>
+      <circle cx="0" cy="0" r="42"/>
+      <circle cx="0" cy="0" r="36"/>
+      <circle cx="0" cy="0" r="30"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="0" y2="-80" stroke="#d8c78b" stroke-linecap="round" stroke-width="6"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="720s" repeatCount="indefinite"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="18" y2="-110" stroke="#fde7a5" stroke-linecap="round" stroke-width="4"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="60s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <g transform="translate(620,220)">
+    <circle cx="0" cy="0" r="150" fill="url(#vinyl)"/>
+    <circle cx="0" cy="0" r="124" fill="none" stroke="#202820" stroke-width="5"/>
+    <circle cx="0" cy="0" r="26" fill="url(#label)"/>
+    <circle cx="0" cy="0" r="9" fill="#0f130c"/>
+    <g stroke="#869973" stroke-width="1" opacity="0.45">
+      <circle cx="0" cy="0" r="150"/>
+      <circle cx="0" cy="0" r="146"/>
+      <circle cx="0" cy="0" r="142"/>
+      <circle cx="0" cy="0" r="138"/>
+      <circle cx="0" cy="0" r="134"/>
+      <circle cx="0" cy="0" r="130"/>
+      <circle cx="0" cy="0" r="126"/>
+      <circle cx="0" cy="0" r="122"/>
+      <circle cx="0" cy="0" r="118"/>
+      <circle cx="0" cy="0" r="114"/>
+      <circle cx="0" cy="0" r="110"/>
+      <circle cx="0" cy="0" r="106"/>
+      <circle cx="0" cy="0" r="102"/>
+      <circle cx="0" cy="0" r="98"/>
+      <circle cx="0" cy="0" r="94"/>
+      <circle cx="0" cy="0" r="90"/>
+      <circle cx="0" cy="0" r="86"/>
+      <circle cx="0" cy="0" r="82"/>
+      <circle cx="0" cy="0" r="78"/>
+      <circle cx="0" cy="0" r="74"/>
+      <circle cx="0" cy="0" r="70"/>
+      <circle cx="0" cy="0" r="66"/>
+      <circle cx="0" cy="0" r="62"/>
+      <circle cx="0" cy="0" r="58"/>
+      <circle cx="0" cy="0" r="54"/>
+      <circle cx="0" cy="0" r="50"/>
+      <circle cx="0" cy="0" r="46"/>
+      <circle cx="0" cy="0" r="42"/>
+      <circle cx="0" cy="0" r="38"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="0" y2="-80" stroke="#d8c78b" stroke-linecap="round" stroke-width="6"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="720s" repeatCount="indefinite"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="18" y2="-110" stroke="#fde7a5" stroke-linecap="round" stroke-width="4"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="60s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <g transform="translate(430,670)">
+    <circle cx="0" cy="0" r="190" fill="url(#vinyl)"/>
+    <circle cx="0" cy="0" r="150" fill="none" stroke="#202820" stroke-width="6"/>
+    <circle cx="0" cy="0" r="32" fill="url(#label)"/>
+    <circle cx="0" cy="0" r="10" fill="#0c1109"/>
+    <g stroke="#869973" stroke-width="1" opacity="0.45">
+      <circle cx="0" cy="0" r="184"/>
+      <circle cx="0" cy="0" r="180"/>
+      <circle cx="0" cy="0" r="176"/>
+      <circle cx="0" cy="0" r="172"/>
+      <circle cx="0" cy="0" r="168"/>
+      <circle cx="0" cy="0" r="164"/>
+      <circle cx="0" cy="0" r="160"/>
+      <circle cx="0" cy="0" r="156"/>
+      <circle cx="0" cy="0" r="152"/>
+      <circle cx="0" cy="0" r="148"/>
+      <circle cx="0" cy="0" r="144"/>
+      <circle cx="0" cy="0" r="140"/>
+      <circle cx="0" cy="0" r="136"/>
+      <circle cx="0" cy="0" r="132"/>
+      <circle cx="0" cy="0" r="128"/>
+      <circle cx="0" cy="0" r="124"/>
+      <circle cx="0" cy="0" r="120"/>
+      <circle cx="0" cy="0" r="116"/>
+      <circle cx="0" cy="0" r="112"/>
+      <circle cx="0" cy="0" r="108"/>
+      <circle cx="0" cy="0" r="104"/>
+      <circle cx="0" cy="0" r="100"/>
+      <circle cx="0" cy="0" r="96"/>
+      <circle cx="0" cy="0" r="92"/>
+      <circle cx="0" cy="0" r="88"/>
+      <circle cx="0" cy="0" r="84"/>
+      <circle cx="0" cy="0" r="80"/>
+      <circle cx="0" cy="0" r="76"/>
+      <circle cx="0" cy="0" r="72"/>
+      <circle cx="0" cy="0" r="68"/>
+      <circle cx="0" cy="0" r="64"/>
+      <circle cx="0" cy="0" r="60"/>
+      <circle cx="0" cy="0" r="56"/>
+      <circle cx="0" cy="0" r="52"/>
+      <circle cx="0" cy="0" r="48"/>
+      <circle cx="0" cy="0" r="44"/>
+      <circle cx="0" cy="0" r="40"/>
+      <circle cx="0" cy="0" r="36"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="0" y2="-80" stroke="#d8c78b" stroke-linecap="round" stroke-width="6"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="720s" repeatCount="indefinite"/>
+    </g>
+    <g transform="rotate(0)">
+      <line x1="0" y1="0" x2="18" y2="-110" stroke="#fde7a5" stroke-linecap="round" stroke-width="4"/>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="60s" repeatCount="indefinite"/>
+    </g>
+  </g>
+</svg>
