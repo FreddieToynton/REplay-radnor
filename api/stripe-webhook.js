@@ -8,9 +8,11 @@ const { Redis } = require('@upstash/redis');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const redis = Redis.fromEnv();
 
-// Stripe needs the raw, unparsed request body to verify the signature,
-// so we tell Vercel not to auto-parse this one route as JSON.
+// Stripe needs the raw, unparsed request body to verify the signature.
+// Force the Node.js runtime explicitly (not Edge) so the stream-reading
+// approach below behaves predictably.
 module.exports.config = {
+  runtime: 'nodejs',
   api: {
     bodyParser: false,
   },
@@ -28,6 +30,13 @@ function readRawBody(req) {
 module.exports = async function handler(req, res) {
   const signature = req.headers['stripe-signature'];
   const rawBody = await readRawBody(req);
+
+  // Temporary debug logging - check Vercel's Runtime Logs to see these.
+  // Remove once webhooks are confirmed working.
+  console.log('DEBUG raw body length:', rawBody.length);
+  console.log('DEBUG signature header present:', !!signature);
+  console.log('DEBUG secret configured:', !!process.env.STRIPE_WEBHOOK_SECRET);
+
   let stripeEvent;
 
   try {
@@ -38,6 +47,7 @@ module.exports = async function handler(req, res) {
     );
   } catch (err) {
     console.error('Webhook signature check failed:', err.message);
+    console.error('DEBUG rawBody preview:', rawBody.toString('utf8').slice(0, 200));
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
