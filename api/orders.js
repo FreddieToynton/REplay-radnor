@@ -62,7 +62,7 @@ module.exports = async function handler(req, res) {
         metadata: {
           productIds: basket.map((item) => item.id).join(','),
         },
-        success_url: `${process.env.URL}/?success=true`,
+        success_url: `${process.env.URL}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.URL}/?cancelled=true`,
       });
 
