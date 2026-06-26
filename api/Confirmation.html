@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order confirmed - REplay</title>
+<meta name="description" content="Your REplay vinyl clock order is confirmed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a1612;
+  --panel:#102019;
+  --panel2:#13261f;
+  --gold:#c9a84c;
+  --gold-bright:#e8c878;
+  --cream:#ece6d6;
+  --sage:#7a8c80;
+  --line: rgba(236,230,214,0.12);
+  --maxw: 720px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 0%, rgba(201,168,76,0.10), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 10% 100%, rgba(122,140,128,0.10), transparent 60%),
+    var(--black);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+h1,h2,h3{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  margin:0;
+}
+a{color:inherit; text-decoration:none;}
+
+.wrap{max-width:var(--maxw); width:100%;}
+
+.logo{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom:40px;
+}
+.logo-disc{
+  width:34px; height:34px; border-radius:50%;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.14), transparent 34%),
+    radial-gradient(circle at center, #2a2f24 0 22%, #12160f 26% 58%, #060804 78% 100%);
+  position:relative;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 1px rgba(201,168,76,0.28);
+}
+.logo-text{font-family:'Fraunces',serif; font-size:1.4rem; font-weight:700;}
+.logo-text .re{color:var(--gold-bright);}
+
+.card{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:56px 48px;
+  text-align:center;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,0.7);
+  opacity:0;
+  transform:translateY(16px);
+  animation:riseIn 0.7s 0.05s forwards cubic-bezier(.16,1,.3,1);
+}
+@keyframes riseIn{to{opacity:1; transform:translateY(0);}}
+
+.tick-wrap{
+  width:72px; height:72px; border-radius:50%;
+  background:linear-gradient(135deg,#e8c878,#c9a84c);
+  margin:0 auto 26px;
+  display:flex; align-items:center; justify-content:center;
+  animation:popIn 0.5s 0.3s cubic-bezier(.34,1.56,.64,1) backwards;
+}
+@keyframes popIn{from{transform:scale(0);} to{transform:scale(1);}}
+
+.eyebrow{
+  font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold);
+  margin-bottom:14px;
+}
+.card h1{font-size:clamp(1.7rem, 4vw, 2.3rem); line-height:1.15;}
+.card p.sub{color:var(--sage); margin-top:14px; font-size:1.02rem; line-height:1.6; max-width:480px; margin-left:auto; margin-right:auto;}
+
+.order-ref{
+  display:inline-flex; align-items:center; gap:10px; margin-top:24px; padding:10px 18px;
+  border:1px solid var(--line); border-radius:30px; font-size:0.85rem; color:var(--sage);
+}
+.order-ref strong{color:var(--gold-bright); font-weight:700; letter-spacing:0.02em;}
+
+.divider{height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent); margin:36px 0;}
+
+.next-steps{text-align:left;}
+.next-steps h3{font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--sage); margin-bottom:18px; text-align:center;}
+.step-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px;}
+.step-list li{
+  display:flex; gap:14px; align-items:flex-start; font-size:0.95rem; line-height:1.55; color:var(--cream);
+}
+.step-num{
+  flex-shrink:0; width:26px; height:26px; border-radius:50%; background:rgba(201,168,76,0.14);
+  color:var(--gold-bright); font-weight:700; font-size:0.78rem; display:flex; align-items:center; justify-content:center;
+  font-family:'Fraunces',serif;
+}
+
+.collection-note{
+  display:flex; gap:14px; align-items:flex-start; background:rgba(201,168,76,0.08); border:1px solid var(--gold);
+  border-radius:12px; padding:16px 18px; margin-top:30px; font-size:0.88rem; line-height:1.55; text-align:left;
+}
+.collection-note svg{flex-shrink:0; width:20px;height:20px; color:var(--gold-bright); margin-top:2px;}
+
+.actions{margin-top:36px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; padding:14px 26px; border-radius:40px;
+  font-weight:700; font-size:0.9rem; cursor:pointer; border:none; transition:transform 0.3s, box-shadow 0.3s;
+}
+.btn-gold{background:linear-gradient(135deg,#e8c878,#c9a84c); color:#1a1306;}
+.btn-gold:hover{transform:translateY(-2px); box-shadow:0 14px 30px -8px rgba(201,168,76,0.5);}
+.btn-outline{background:transparent; border:1px solid var(--line); color:var(--cream);}
+.btn-outline:hover{border-color:var(--gold); transform:translateY(-2px);}
+
+.footer-note{color:var(--sage); font-size:0.8rem; margin-top:36px; text-align:center; line-height:1.6;}
+
+@media (max-width:560px){
+  .card{padding:40px 26px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-disc"></div>
+    <div class="logo-text"><span class="re">RE</span>play</div>
+  </div>
+
+  <div class="card">
+    <div class="tick-wrap">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#1a1306" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <div class="eyebrow" id="statusEyebrow">Order confirmed</div>
+    <h1 id="mainHeading">Thank you - your order is in.</h1>
+    <p class="sub" id="subText">We've received your order and we're getting your clock ready.</p>
+
+    <div class="order-ref" id="orderRefWrap" style="display:none;">
+      Order reference <strong id="orderRefValue"></strong>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="next-steps">
+      <h3>What happens next</h3>
+      <ul class="step-list" id="stepList"></ul>
+    </div>
+
+    <div class="collection-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
+      <div><strong>Collection only.</strong> All orders are collected from Radnor House Sevenoaks (near Sundridge). We'll email you to arrange a time - we aren't able to post or deliver.</div>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-gold" href="index.html#shop">Back to the shop</a>
+      <a class="btn btn-outline" href="index.html">Return home</a>
+    </div>
+  </div>
+
+  <div class="footer-note">Questions about your order? Just reply to the confirmation email we send you.<br>REplay · Radnor Enterprise · A Young Enterprise UK — 2026</div>
+</div>
+
+<script>
+  // Read payment method and order reference from the URL, e.g.
+  // confirmation.html?method=cash&order=RP-1029
+  // confirmation.html?method=card&session_id=cs_test_123  (Stripe redirect)
+  const params = new URLSearchParams(window.location.search);
+  const method = params.get('method') || (params.get('session_id') ? 'card' : 'cash');
+  const orderRef = params.get('order') || params.get('session_id');
+
+  const heading = document.getElementById('mainHeading');
+  const sub = document.getElementById('subText');
+  const eyebrow = document.getElementById('statusEyebrow');
+  const stepList = document.getElementById('stepList');
+  const orderRefWrap = document.getElementById('orderRefWrap');
+  const orderRefValue = document.getElementById('orderRefValue');
+
+  if(orderRef){
+    orderRefWrap.style.display = 'inline-flex';
+    orderRefValue.textContent = orderRef;
+  }
+
+  let steps = [];
+
+  if(method === 'card'){
+    eyebrow.textContent = 'Payment received';
+    heading.textContent = 'Payment successful - your clock is booked.';
+    sub.textContent = "We've taken your payment and locked in your clock. A confirmation email is on its way.";
+    steps = [
+      "We'll send a confirmation email with your order details and receipt.",
+      "Once your clock is ready, we'll email you to arrange a collection time at Radnor House Sevenoaks.",
+      "Bring this confirmation (or just your name) along when you collect."
+    ];
+  } else {
+    eyebrow.textContent = 'Order confirmed';
+    heading.textContent = "Thank you - your order is in.";
+    sub.textContent = "We've received your order. Payment is by cash, due when you collect your clock.";
+    steps = [
+      "We'll email you to confirm your order and arrange a collection time at Radnor House Sevenoaks.",
+      "Have the exact cash amount ready for when you collect.",
+      "Bring this confirmation (or just your name) along when you collect."
+    ];
+  }
+
+  stepList.innerHTML = steps.map((text, i) => `
+    <li><span class="step-num">${i + 1}</span><span>${text}</span></li>
+  `).join('');
+</script>
+
+</body>
+</html>
