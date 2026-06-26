@@ -770,37 +770,37 @@ const basket = [];
 let products = [
   {
     id: 1,
-    name: "insert title",
+    name: "Coming soon",
     price: 15,
-    desc: "insert description",
+    desc: "This clock hasn't been listed yet - check back soon.",
     stock: 1
   },
   {
     id: 2,
-    name: "insert title",
+    name: "Coming soon",
     price: 15,
-    desc: "insert description",
+    desc: "This clock hasn't been listed yet - check back soon.",
     stock: 1
   },
   {
     id: 3,
-    name: "insert title",
+    name: "Coming soon",
     price: 15,
-    desc: "insert description",
+    desc: "This clock hasn't been listed yet - check back soon.",
     stock: 1
   },
   {
     id: 4,
-    name: "insert title",
+    name: "Coming soon",
     price: 15,
-    desc: "insert description",
+    desc: "This clock hasn't been listed yet - check back soon.",
     stock: 1
   },
   {
     id: 5,
-    name: "insert title",
+    name: "Coming soon",
     price: 15,
-    desc: "insert description",
+    desc: "This clock hasn't been listed yet - check back soon.",
     stock: 1
   },
   {
@@ -837,7 +837,7 @@ function renderProducts(){
     card.className = 'product-card';
     const imageBlock = p.id === 6 ?
       `<img class="product-cover" src="images/custom-clock.svg" alt="${p.name}" />` :
-      `<div class="placeholder-text">Placeholder image</div>`;
+      `<div class="placeholder-text">Coming soon</div>`;
     card.innerHTML = `
       <div class="product-img">
         ${imageBlock}
@@ -937,22 +937,20 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
     
     const result = await response.json();
 
-    // If paying by card, redirect to Stripe's secure checkout page
+    // If paying by card, redirect to Stripe's secure checkout page.
+    // Note: the backend's Stripe Checkout Session should set success_url to
+    // something like "confirmation.html?method=card&session_id={CHECKOUT_SESSION_ID}"
+    // so the customer lands on our confirmation page after paying.
     if(result.checkoutUrl){
       window.location.href = result.checkoutUrl;
       return;
     }
-    
-    // Cash on collection - show success message right away
-    document.querySelector('[data-fs-success]').style.display = 'block';
-    this.style.display = 'none';
-    
-    // Clear basket
-    basket.length = 0;
-    renderBasket();
-    
-    // Reload products to reflect sold-out items
-    loadProducts();
+
+    // Cash on collection - send the customer to the confirmation page
+    const orderRef = result.orderId || result.orderRef || '';
+    const params = new URLSearchParams({ method: 'cash' });
+    if(orderRef) params.set('order', orderRef);
+    window.location.href = `confirmation.html?${params.toString()}`;
   } catch(error){
     console.error('Error:', error);
     document.querySelector('[data-fs-error]').textContent = 'Order submission failed. Please try again.';
