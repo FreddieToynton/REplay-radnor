@@ -398,12 +398,6 @@ section{position:relative; padding:120px 0;}
   border-radius:12px; padding:16px 18px; margin-bottom:24px; font-size:0.88rem; line-height:1.55;
 }
 .collection-note svg{flex-shrink:0; width:20px;height:20px; color:var(--gold-bright); margin-top:2px;}
-.pay-options{display:flex; gap:12px; margin-top:6px;}
-.pay-option{
-  flex:1; padding:14px; border:1px solid var(--line); border-radius:10px; text-align:center; cursor:pointer;
-  font-size:0.82rem; font-weight:600; transition:border-color 0.3s, background 0.3s;
-}
-.pay-option.active{border-color:var(--gold); background:rgba(201,168,76,0.1); color:var(--gold-bright);}
 .submit-btn{
   width:100%; margin-top:10px; padding:16px; border-radius:40px; border:none; cursor:pointer;
   background:linear-gradient(135deg,#e8c878,#c9a84c); color:#1a1306; font-weight:800; font-size:0.95rem;
@@ -651,14 +645,6 @@ footer{background:var(--black); border-top:1px solid var(--line); padding:60px 0
             <div><strong>Collection only.</strong> All orders are collected from Radnor House Sevenoaks (near Sundridge) - we'll email you to arrange a time. We aren't able to post or deliver.</div>
           </div>
 
-          <div class="form-group">
-            <label>Payment method</label>
-            <div class="pay-options">
-              <div class="pay-option active" data-pay="cash" onclick="selectPay(this)">Cash on collection</div>
-              <div class="pay-option" data-pay="card" onclick="selectPay(this)">Pay online (card)</div>
-            </div>
-          </div>
-
           <button type="submit" class="submit-btn" data-fs-submit-btn>Submit order</button>
         </form>
       </div>
@@ -897,12 +883,6 @@ function removeItem(idx){
   renderBasket();
 }
 
-/* ---------- PAYMENT TOGGLE ---------- */
-function selectPay(el){
-  document.querySelectorAll('.pay-option').forEach(o=>o.classList.remove('active'));
-  el.classList.add('active');
-}
-
 /* ---------- ORDER FORM SUBMISSION ---------- */
 document.getElementById('orderForm').addEventListener('submit', async function(e){
   e.preventDefault();
@@ -919,7 +899,6 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
 
   try {
     const formData = new FormData(this);
-    const paymentMethod = document.querySelector('.pay-option.active').dataset.pay;
     
     const response = await fetch('/api/orders', {
       method: 'POST',
@@ -928,7 +907,7 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
         name: formData.get('name'),
         email: formData.get('email'),
         message: formData.get('message'),
-        paymentMethod,
+        paymentMethod: 'cash',
         basket,
       }),
     });
@@ -937,24 +916,21 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
     
     const result = await response.json();
 
-    // If paying by card, redirect to Stripe's secure checkout page.
-    // Note: the backend's Stripe Checkout Session should set success_url to
-    // something like "confirmation.html?method=card&session_id={CHECKOUT_SESSION_ID}"
-    // so the customer lands on our confirmation page after paying.
-    if(result.checkoutUrl){
-      window.location.href = result.checkoutUrl;
-      return;
-    }
-
-    // Cash on collection - send the customer to the confirmation page
     const orderRef = result.orderId || result.orderRef || '';
     const params = new URLSearchParams({ method: 'cash' });
     if(orderRef) params.set('order', orderRef);
     window.location.href = `confirmation.html?${params.toString()}`;
   } catch(error){
     console.error('Error:', error);
-    document.querySelector('[data-fs-error]').textContent = 'Order submission failed. Please try again.';
-    document.querySelector('[data-fs-error]').style.display = 'block';
+    const errNode = document.querySelector('[data-fs-error]');
+    let message = 'Order submission failed. Please try again.';
+
+    if (error && error.message) {
+      message = error.message;
+    }
+
+    errNode.textContent = message;
+    errNode.style.display = 'block';
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = originalText;
